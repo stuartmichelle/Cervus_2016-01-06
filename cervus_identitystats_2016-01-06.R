@@ -6,19 +6,24 @@ setwd('/Users/macair/Documents/Philippines/Genetics/parentage/Cervus_2016-01-06/
 dat = read.csv('DP20g95/DP20g95_ID.csv', stringsAsFactors=FALSE)
 nrow(dat) # 65
 
-	# add year of the sample - skipped this because dDocent IDs are different and I'm not sure what this code is doing
-dat$First.year = as.numeric(paste('20', gsub('APCL_|.*', '', dat$First.ID), sep=''))
-dat$Second.year = as.numeric(paste('20', gsub('APCL|_.*', '', dat$Second.ID), sep=''))
+	# add year of the sample
+dat$First.year = as.numeric(paste('20', gsub('APCL_|[0-9,A-Z]{3}L[0-9]{4}', '', dat$First.ID, perl=TRUE), sep=''))
+dat$Second.year = as.numeric(paste('20', gsub('APCL_|[0-9,A-Z]{3}L[0-9]{4}', '', dat$Second.ID, perl=TRUE), sep=''))
 
-	# fix ID to always have 4-digit ligation IDs (needed for matching against Sample_Data google sheet) - skipped - ID's already have 4-digit ligation IDs
+
+	# fix ID to always have 4-digit ligation IDs (needed for matching against Sample_Data google sheet)
 ind = grep('L[[:digit:]]{3}$', dat$First.ID) # rows with 3-digit ligation IDs
 dat$First.ID[ind] = gsub('L([[:digit:]]{3})$', 'L0\\1', dat$First.ID[ind])
 ind = grep('L[[:digit:]]{3}$', dat$Second.ID)
 dat$Second.ID[ind] = gsub('L([[:digit:]]{3})$', 'L0\\1', dat$Second.ID[ind])
 
 	# add sampleid
-dat$First.SampleID = gsub('L[[:digit:]]{1,}$', '', dat$First.ID)
-dat$Second.SampleID = gsub('L[[:digit:]]{1,}$', '', dat$Second.ID)
+dat$First.SampleID_dd = gsub('L[[:digit:]]{1,}$', '', dat$First.ID)
+dat$Second.SampleID_dd = gsub('L[[:digit:]]{1,}$', '', dat$Second.ID)
+
+	#fix sampleid from dDocent format back to Sample_Data format
+dat$First.SampleID = paste('APCL', gsub('20', '', dat$First.year), '_', gsub('APCL_[0-9]{2}', '', dat$First.SampleID_dd, perl=TRUE), sep='')	
+dat$Second.SampleID = paste('APCL', gsub('20', '', dat$Second.year), '_', gsub('APCL_[0-9]{2}', '', dat$Second.SampleID_dd, perl=TRUE), sep='')	
 
 	# add lat/lon from our Google Sheet
 require(googlesheets)
@@ -37,7 +42,7 @@ dat = merge(dat, m2, by.x='Second.SampleID', by.y = 'Second.Sample_ID', all.x=TR
 	# distance between samples
 require(fields)
 # source('greatcircle_funcs.R') # alternative, probably faster
-alldists = rdist.earth(as.matrix(dat[,c('First.Lon', 'First.Lat')]), as.matrix(dat[,c('Second.Lon', 'Second.Lat')]), miles=FALSE, R=6371) # see http://www.r-bloggers.com/great-circle-distance-calculations-in-r/ # slow because it does ALL pairwise distances, instead of just in order
+alldists = rdist.earth(as.matrix(dat[,c('First.Lon.y', 'First.Lat.y')]), as.matrix(dat[,c('Second.Lon.y', 'Second.Lat.y')]), miles=FALSE, R=6371) # see http://www.r-bloggers.com/great-circle-distance-calculations-in-r/ # slow because it does ALL pairwise distances, instead of just in order
 dat$distkm = diag(alldists)
 
 	# add ligation ID
