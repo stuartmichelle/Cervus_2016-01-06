@@ -4,13 +4,13 @@
 setwd('/Users/macair/Documents/Philippines/Genetics/parentage/Cervus_2016-01-06/')
 
 dat = read.csv('DP20g95/DP20g95_ID.csv', stringsAsFactors=FALSE)
-nrow(dat) # 14023
+nrow(dat) # 65
 
 	# add year of the sample
-dat$First.year = as.numeric(paste('20', gsub('APCL|_.*', '', dat$First.ID), sep=''))
+dat$First.year = as.numeric(paste('20', gsub('APCL_(?<=[0-9]{2}).*', '', dat$First.ID), sep='', perl = TRUE))
 dat$Second.year = as.numeric(paste('20', gsub('APCL|_.*', '', dat$Second.ID), sep=''))
 
-	# fix ID to always have 4-digit ligation IDs (needed for matching against Sample_Data google sheet)
+	# fix ID to always have 4-digit ligation IDs (needed for matching against Sample_Data google sheet) - skipped - ID's already have 4-digit ligation IDs
 ind = grep('L[[:digit:]]{3}$', dat$First.ID) # rows with 3-digit ligation IDs
 dat$First.ID[ind] = gsub('L([[:digit:]]{3})$', 'L0\\1', dat$First.ID[ind])
 ind = grep('L[[:digit:]]{3}$', dat$Second.ID)

@@ -1,0 +1,51 @@
+setwd('/Users/macair/Documents/Philippines/Genetics/parentage/Cervus_2016-01-06/')
+dat = read.csv('DP20g95/DP20g95_ID.csv', stringsAsFactors=FALSE)
+nrow(dat) # 14023
+dat$First.year = as.numeric(paste('20', gsub('APCL|_.*', '', dat$First.ID), sep=''))
+dat$Second.year = as.numeric(paste('20', gsub('APCL|_.*', '', dat$Second.ID), sep=''))
+dat$First.year
+dat$First.ID
+dat$Second.year
+# add year of the sample#
+dat$First.year = as.numeric(paste('20', gsub('APCL_|.*', '', dat$First.ID), sep=''))#
+dat$Second.year = as.numeric(paste('20', gsub('APCL_|.*', '', dat$Second.ID), sep=''))
+dat$Second.year
+dat$First.year
+gsub('APCL_|.*', '', dat$First.ID)
+gsub('APCL|_.*', '', dat$First.ID)
+gsub?
+gsub ?
+dat$First.SampleID = gsub('L[[:digit:]]{1,}$', '', dat$First.ID)#
+dat$Second.SampleID = gsub('L[[:digit:]]{1,}$', '', dat$Second.ID)
+require(googlesheets)
+install.packages (googlesheets)
+install.packages("googlesheets")
+require(googlesheets)
+# gs_auth(new_user = TRUE) # run this if having authorization problems#
+mykey = '1Rf_dFJ5WK-vTTsIT_kHHOcFrKzQtMFtKiuXiFw1lh9Y' # for Sample_Data sheet
+gssampdat <- gs_key(mykey)
+gssampdat <- gs_key(mykey)#
+sampledata <- gs_read(gssampdat, ws='Samples')
+library (googlesheets)
+supressMessages(library(dplyr))
+suppressMessages(library(dplyr))
+gs_ls()
+gs_gap() %>%
+gs_copy(to = "Gapminder")
+require(googlesheets)
+# gs_auth(new_user = TRUE) # run this if having authorization problems#
+mykey = '1Rf_dFJ5WK-vTTsIT_kHHOcFrKzQtMFtKiuXiFw1lh9Y' # for Sample_Data sheet#
+gssampdat <- gs_key(mykey)#
+sampledata <- gs_read(gssampdat, ws='Samples')
+m1 = sampledata#
+names(m1) = paste('First.', names(m1), sep='')#
+dat = merge(dat, m1, by.x='First.SampleID', by.y = 'First.Sample_ID', all.x=TRUE)#
+m2 = sampledata#
+names(m2) = paste('Second.', names(m2), sep='')#
+dat = merge(dat, m2, by.x='Second.SampleID', by.y = 'Second.Sample_ID', all.x=TRUE)
+# distance between samples#
+require(fields)
+install.packages(“fields”)
+install.packages (“fields”)
+install.packages ("fields")
+install.packages ("fields")
