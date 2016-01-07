@@ -88,7 +88,7 @@ dat$col[dat$MATCH == "MATCH_same_anem_diff_year"]<-"yellow"
 dat$col[dat$MATCH == "NO_diff_year_large_dist"]<-"orange"
 dat$col[dat$MATCH == "NO_same_year_consec_samples"]<-"red"
 dat$col[dat$MATCH == "NO_same_year_large_dist"]<-"pink"
-dat$col[dat$MATCH == "NO_same_year_same_anem"]<-"brown"
+dat$col[dat$MATCH == "NO_same_year_same_anem"]<-"black"
 
 plot(dat$Matching.loci, dat$Mismatch.prop, col=dat$col)
 
