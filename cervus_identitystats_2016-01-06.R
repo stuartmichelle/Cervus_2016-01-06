@@ -68,9 +68,9 @@ dat = dat[order(dat$Matching.loci),]
 
 #####################
 ## investigation
-hist(dat$Matching.loci, col='grey', breaks=50) # most match at <1000 SNPs
+hist(dat$Matching.loci, col='grey', breaks=50) # most match at ~250
 
-hist(dat$Mismatch.prop, col='grey', breaks=50) # interesting second hump < 0.02
+hist(dat$Mismatch.prop, col='grey', breaks=50) 
 
 plot(dat$Matching.loci, dat$Mismatching.loci)
 abline(0, 0.005) # 5% error rate
@@ -78,10 +78,13 @@ abline(0, 0.005) # 5% error rate
 plot(dat$Matching.loci, dat$Mismatch.prop)
 abline(h=0.015)
 
+	#order by Mismatch.prop
+dat=dat[order(dat$Mismatch.prop),]
+
 colnms = c('First.ID', 'Second.ID', 'Loci.typed', 'Loci.typed.1', 'Matching.loci', 'Mismatching.loci', 'First.Size', 'Second.Size', 'First.Tail_color', 'Second.Tail_color', 'distkm', 'First.Notes', 'Second.Notes')
 
 	# exact matches
-sum(dat$Status == 'Exact match') # 0 exact matches
+sum(dat$Status == 'Exact match') # 1 exact matches
 
 	# high quality fuzzy matches
 ind = dat$Matching.loci>=2000 # seem like good matches. out of ~11k loci
