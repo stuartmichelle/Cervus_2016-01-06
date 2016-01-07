@@ -3,7 +3,7 @@
 
 setwd('/Users/macair/Documents/Philippines/Genetics/parentage/Cervus_2016-01-06/')
 
-dat = read.csv('DP20_edited_genepop/DP20edited_ID.csv', stringsAsFactors=FALSE)
+dat = read.csv('DP20_edited_genepop/DP20_edited_R.csv', stringsAsFactors=FALSE)
 nrow(dat) # 101
 
 	# add year of the sample
@@ -80,6 +80,19 @@ abline(h=0.015)
 
 	#order by Mismatch.prop
 dat=dat[order(dat$Mismatch.prop),]
+
+dat$col[dat$MATCH == "MATCH_***"]<-"purple"
+dat$col[dat$MATCH == "MATCH_diff_year_small_dist"]<-"blue"
+dat$col[dat$MATCH == "MATCH_regenotyped"]<-"green"
+dat$col[dat$MATCH == "MATCH_same_anem_diff_year"]<-"yellow"
+dat$col[dat$MATCH == "NO_diff_year_large_dist"]<-"orange"
+dat$col[dat$MATCH == "NO_same_year_consec_samples"]<-"red"
+dat$col[dat$MATCH == "NO_same_year_large_dist"]<-"pink"
+dat$col[dat$MATCH == "NO_same_year_same_anem"]<-"brown"
+
+plot(dat$Matching.loci, dat$Mismatch.prop, col=dat$col)
+
+
 
 colnms = c('First.ID', 'Second.ID', 'Loci.typed', 'Loci.typed.1', 'Matching.loci', 'Mismatching.loci', 'First.Size', 'Second.Size', 'First.Tail_color', 'Second.Tail_color', 'distkm', 'First.Notes', 'Second.Notes')
 
