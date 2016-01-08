@@ -1,7 +1,7 @@
 ##############
 ## prep
 
-setwd('/Users/macair/Documents/Philippines/Genetics/parentage/Cervus_2016-01-06/')
+setwd('~/Documents/Rutgers/Philippines/Genetics/parentage/Cervus_2016-01-06/')
 
 dat = read.csv('DP20_edited_genepop/DP20_edited_R.csv', stringsAsFactors=FALSE)
 nrow(dat) # 101
@@ -91,6 +91,7 @@ dat$col[dat$MATCH == "NO_same_year_large_dist"]<-"pink"
 dat$col[dat$MATCH == "NO_same_year_same_anem"]<-"black"
 
 plot(dat$Matching.loci, dat$Mismatch.prop, col=dat$col)
+legend(150,0.35, c("MATCH_***","MATCH_diff_year_small_dist", "MATCH_regenotyped", "MATCH_same_anem_diff_year", "NO_diff_year_large_dist", "NO_same_year_consec_samples", "NO_same_year_large_dist", "NO_same_year_same_anem"), col = c("purple", "blue", "green", "yellow", "orange", "red", "pink", "black"), pch = 1)
 
 
 
