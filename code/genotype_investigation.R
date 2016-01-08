@@ -3,8 +3,8 @@
 ###############################################
 ## compare genotypes at pairs of individuals
 ###############################################
-setwd('/Users/mpinsky/Documents/Rutgers/Philippines/Genetics/genotyping/stacks_sensitivity_2015-07-17')
-source('../../functions/readGenepop.R')
+setwd('/Users/michelle/Documents/Rutgers/Philippines/Genetics/parentage/Cervus_2016-01-06')
+source('code/readGenepop.R')
 library(RCurl)
 
 genfile = '../lax-rxstacks_2015-06-17/batch_1.r75m5.genepop' # original
