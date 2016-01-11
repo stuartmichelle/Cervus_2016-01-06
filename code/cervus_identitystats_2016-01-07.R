@@ -3,7 +3,7 @@
 
 setwd('~/Documents/Philippines/Genetics/parentage/Cervus_2016-01-06/')
 
-dat = read.csv('DP20_edited_genepop/DP20_edited_R.csv', stringsAsFactors=FALSE)
+dat = read.csv('DP20_edited_genepop/DP20proposed_ID.csv', stringsAsFactors=FALSE)
 nrow(dat) # 101
 
 	# add year of the sample
@@ -24,6 +24,9 @@ dat$Second.SampleID_dd = gsub('L[[:digit:]]{1,}$', '', dat$Second.ID)
 	#fix sampleid from dDocent format back to Sample_Data format
 dat$First.SampleID = paste('APCL', gsub('20', '', dat$First.year), '_', gsub('APCL_[0-9]{2}', '', dat$First.SampleID_dd, perl=TRUE), sep='')	
 dat$Second.SampleID = paste('APCL', gsub('20', '', dat$Second.year), '_', gsub('APCL_[0-9]{2}', '', dat$Second.SampleID_dd, perl=TRUE), sep='')	
+
+	#write out a csv of the dat up to this point - change the sample_IDs based on potential ID errors - then continue
+	write.csv(dat, file='potential.csv')
 
 	# add lat/lon from our Google Sheet
 require(googlesheets)
