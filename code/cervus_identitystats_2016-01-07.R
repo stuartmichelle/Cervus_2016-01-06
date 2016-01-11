@@ -27,6 +27,10 @@ dat$Second.SampleID = paste('APCL', gsub('20', '', dat$Second.year), '_', gsub('
 
 	#write out a csv of the dat up to this point - change the sample_IDs based on potential ID errors - then continue
 	write.csv(dat, file='potential.csv')
+	
+	#read it back in with the changes
+	dat = read.csv('potential.csv', stringsAsFactors=FALSE)
+
 
 	# add lat/lon from our Google Sheet
 require(googlesheets)
@@ -68,6 +72,8 @@ dat = merge(dat, l2[,c('Second.Ligation_ID', 'Second.Pool')], by.x='Second.ID', 
 	
 	# order by number of matching loci
 dat = dat[order(dat$Matching.loci),]
+
+write.csv(dat, file='proposed_lats.csv')
 
 #####################
 ## investigation
