@@ -7,18 +7,35 @@ setwd('/Users/michelle/Documents/Rutgers/Philippines/Genetics/parentage/Cervus_2
 source('code/readGenepop_space.R')
 library(RCurl)
 
-genfile = '../lax-rxstacks_2015-06-17/batch_1.r75m5.genepop' # original
-genfile = 'laxnor-oldcat/r75m5.genepop' # small set of 23, no -r in process_radtags, original catalog
-genfile = 'laxnor/batch_1.genepop' # small  set of 23, no -r in process_radtags, de novo catalog
-genfile = 'default/batch_1.genepop' # small  set of 23, no -r in process_radtags, de novo catalog
+# read in list of troublesome samples to analyze
+comparisons <- ____
+
+# genfile = '../lax-rxstacks_2015-06-17/batch_1.r75m5.genepop' # original
+# genfile = 'laxnor-oldcat/r75m5.genepop' # small set of 23, no -r in process_radtags, original catalog
+# genfile = 'laxnor/batch_1.genepop' # small  set of 23, no -r in process_radtags, de novo catalog
+# genfile = 'default/batch_1.genepop' # small  set of 23, no -r in process_radtags, de novo catalog
 genfile = 'DP20_edited_genepop/DP20g95_edited.genepop' #all of seq03-09 after dDocent filtering, no rad_haplotyper, and minus 3 non-APCL samples - "pop" must be lower case in order for readGenepop to work
 
 dat = readGenepop(genfile)
 
 ncol(dat)-2 # number of loci
 
+# calculate number of pairwise comparisons
+numpairwisecomparisons <- 
+
 	# set up individuals to compare
-totest = vector('list', 21)
+totest = data.frame(ind1 = character(numpairwisecomparisons), ind2 = character(numpairwisecomparisons))
+row <- 1
+for(i in 1:nrow(comparisons)){
+	if(!is.na(comparisons$Ligation_1) & !is.na(comparisons$Ligation_2)){
+		totest$ind1[row] <- comparison$Ligation_1[i]
+		totest$ind2[row] = comparisons$Ligation_2[i]
+		row = row+1
+	}
+	
+}
+
+
 totest[[1]] = data.frame(ind1 = c('APCL_14126L1321','APCL_14126L1321'),  ind2 = c('APCL_14126L1701','APCL_14126L1701'))
 totest[[2]] = data.frame(ind1 = c('APCL_13333L0357','APCL_13333L0357'),  ind2 = c('APCL_13333L1721','APCL_13333L1721'))
 totest[[3]] = data.frame(ind1 = c('APCL_13565L0670','APCL_13565L0670'),  ind2 = c('APCL_13565L1735','APCL_13565L1735'))

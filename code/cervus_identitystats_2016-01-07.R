@@ -1,7 +1,7 @@
 ##############
 ## prep
 
-setwd('~/Documents/Rutgers/Philippines/Genetics/parentage/Cervus_2016-01-06/')
+setwd('~/Documents/Philippines/Genetics/parentage/Cervus_2016-01-06/')
 
 dat = read.csv('DP20_edited_genepop/DP20_edited_R.csv', stringsAsFactors=FALSE)
 nrow(dat) # 101
