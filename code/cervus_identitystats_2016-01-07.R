@@ -5,7 +5,7 @@
 #Mr. Whitmore
 setwd('~/Documents/Rutgers/Philippines/Genetics/parentage/Cervus_2016-01-06/')
 
-dat = read.csv('DP20_edited_genepop/DP20_proposed_ID.csv', stringsAsFactors=FALSE)
+dat = read.csv('DP20_edited_genepop/DP20edited_ID2.csv', stringsAsFactors=FALSE)
 nrow(dat) # 101
 
 # # 	# add year of the sample
@@ -40,21 +40,23 @@ require(googlesheets)
 mykey = '1Rf_dFJ5WK-vTTsIT_kHHOcFrKzQtMFtKiuXiFw1lh9Y' # for Sample_Data sheet
 gssampdat <- gs_key(mykey)
 sampledata <- gs_read(gssampdat, ws='Samples')
-#m1 is all of the samples sheet
 m1 = sampledata
-#add First. to the samples sheet so that it matches up with the ID sheet
 names(m1) = paste('First.', names(m1), sep='')
-#merge the ID sheet and the samples sheet
 dat = merge(dat, m1, by.x='First.SampleID', by.y = 'First.Sample_ID', all.x=TRUE)
-#repeat so that there is also a second sample ID for the comparison
 m2 = sampledata
 names(m2) = paste('Second.', names(m2), sep='')
 dat = merge(dat, m2, by.x='Second.SampleID', by.y = 'Second.Sample_ID', all.x=TRUE)
+
+	# make sure Lats and longs are numeric
+	is.numeric('First.Lon')
+	is.character('First.Lon')
+	dat$First.Lon <- as.numeric('First.Lon')
+	transform(dat, First.Lon = as.numeric('First.Lon'), First.Lat = as.numeric(First.Lat), Second.Lon = as.numeric('Second.Lon'), Second.Lat=as.numeric('Second.Lat'))
 	
 	# distance between samples
 require(fields)
 # source('greatcircle_funcs.R') # alternative, probably faster
-alldists = rdist.earth(as.matrix(dat[,c('First.Lon.x', 'First.Lat.x')]), as.matrix(dat[,c('Second.Lon.y', 'Second.Lat.y')]), miles=FALSE, R=6371) # see http://www.r-bloggers.com/great-circle-distance-calculations-in-r/ # slow because it does ALL pairwise distances, instead of just in order
+alldists = rdist.earth(as.matrix(dat[,c('First.Lon', 'First.Lat')]), as.matrix(dat[,c('Second.Lon', 'Second.Lat')]), miles=FALSE, R=6371) # see http://www.r-bloggers.com/great-circle-distance-calculations-in-r/ # slow because it does ALL pairwise distances, instead of just in order
 dat$distkm = diag(alldists)
 
 	# add ligation ID
