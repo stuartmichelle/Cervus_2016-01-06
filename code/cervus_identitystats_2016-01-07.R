@@ -1,21 +1,23 @@
 ##############
 ## prep
+# Lightning
+# setwd('~/Documents/Philippines/Genetics/parentage/Cervus_2016-01-06/')
+#Mr. Whitmore
+setwd('~/Documents/Rutgers/Philippines/Genetics/parentage/Cervus_2016-01-06/')
 
-setwd('~/Documents/Philippines/Genetics/parentage/Cervus_2016-01-06/')
-
-dat = read.csv('DP20_edited_genepop/DP20proposed_ID.csv', stringsAsFactors=FALSE)
+dat = read.csv('DP20_edited_genepop/DP20edited_ID.csv', stringsAsFactors=FALSE)
 nrow(dat) # 101
 
-	# add year of the sample
+# 	add year of the sample
 dat$First.year = as.numeric(paste('20', gsub('APCL_|[0-9,A-Z]{3}L[0-9]{4}', '', dat$First.ID, perl=TRUE), sep=''))
 dat$Second.year = as.numeric(paste('20', gsub('APCL_|[0-9,A-Z]{3}L[0-9]{4}', '', dat$Second.ID, perl=TRUE), sep=''))
 
 
-	# fix ID to always have 4-digit ligation IDs (needed for matching against Sample_Data google sheet)
-ind = grep('L[[:digit:]]{3}$', dat$First.ID) # rows with 3-digit ligation IDs
-dat$First.ID[ind] = gsub('L([[:digit:]]{3})$', 'L0\\1', dat$First.ID[ind])
-ind = grep('L[[:digit:]]{3}$', dat$Second.ID)
-dat$Second.ID[ind] = gsub('L([[:digit:]]{3})$', 'L0\\1', dat$Second.ID[ind])
+	# # fix ID to always have 4-digit ligation IDs (needed for matching against Sample_Data google sheet)
+# ind = grep('L[[:digit:]]{3}$', dat$First.ID) # rows with 3-digit ligation IDs
+# dat$First.ID[ind] = gsub('L([[:digit:]]{3})$', 'L0\\1', dat$First.ID[ind])
+# ind = grep('L[[:digit:]]{3}$', dat$Second.ID)
+# dat$Second.ID[ind] = gsub('L([[:digit:]]{3})$', 'L0\\1', dat$Second.ID[ind])
 
 	# add sampleid
 dat$First.SampleID_dd = gsub('L[[:digit:]]{1,}$', '', dat$First.ID)
@@ -25,11 +27,11 @@ dat$Second.SampleID_dd = gsub('L[[:digit:]]{1,}$', '', dat$Second.ID)
 dat$First.SampleID = paste('APCL', gsub('20', '', dat$First.year), '_', gsub('APCL_[0-9]{2}', '', dat$First.SampleID_dd, perl=TRUE), sep='')	
 dat$Second.SampleID = paste('APCL', gsub('20', '', dat$Second.year), '_', gsub('APCL_[0-9]{2}', '', dat$Second.SampleID_dd, perl=TRUE), sep='')	
 
-	#write out a csv of the dat up to this point - change the sample_IDs based on potential ID errors - then continue
-	write.csv(dat, file='potential.csv')
+	# #write out a csv of the dat up to this point - change the sample_IDs based on potential ID errors - then continue
+	# write.csv(dat, file='potential.csv')
 	
-	#read it back in with the changes
-	dat = read.csv('potential.csv', stringsAsFactors=FALSE)
+	# #read it back in with the changes
+	# dat = read.csv('potential.csv', stringsAsFactors=FALSE)
 
 
 	# add lat/lon from our Google Sheet
@@ -38,13 +40,28 @@ require(googlesheets)
 mykey = '1Rf_dFJ5WK-vTTsIT_kHHOcFrKzQtMFtKiuXiFw1lh9Y' # for Sample_Data sheet
 gssampdat <- gs_key(mykey)
 sampledata <- gs_read(gssampdat, ws='Samples')
-
 m1 = sampledata
 names(m1) = paste('First.', names(m1), sep='')
 dat = merge(dat, m1, by.x='First.SampleID', by.y = 'First.Sample_ID', all.x=TRUE)
 m2 = sampledata
 names(m2) = paste('Second.', names(m2), sep='')
 dat = merge(dat, m2, by.x='Second.SampleID', by.y = 'Second.Sample_ID', all.x=TRUE)
+
+	# # make # sure Lats and longs are numeric
+	# is.numeric('First.Lon')
+	# is.character('First.Lon')
+	# # dat$First.Lon <- as.numeric('First.Lon')
+	# transform(dat, First.Lon = as.numeric('First.Lon'), First.Lat = as.numeric(First.Lat), Second.Lon = as.numeric('Second.Lon'), Second.Lat=as.numeric('Second.Lat'))
+	# dat <- within(dat, {
+		 # First.Lon <- as.numeric(as.character(First.Lon))
+	# })
+	
+	
+	# #write out a csv of the dat up to this point - change the lat lons to numbers
+	write.csv(dat, file='latlonfix.csv')
+	
+	# #read it back in with the changes
+	dat = read.csv('latlonfix.csv', stringsAsFactors=FALSE)
 	
 	# distance between samples
 require(fields)
